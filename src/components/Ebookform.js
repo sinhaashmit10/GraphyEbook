@@ -92,6 +92,7 @@ function EbookForm() {
           <div className="card" key={index}>
             <div className="card-body">
               <p className="card-text">{content}</p>
+              <img src="history.png" style={{ maxWidth: '25px', maxHeight: '25px' }} alt="" />
             </div>
           </div>
         ))}

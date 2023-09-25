@@ -80,11 +80,17 @@
   font-weight: 1000;
 } */
 
+.card-body img{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
 .card-text {
   font-family: 'Instrument Sans';
   font-size: 1.1rem;
-  text-align: center;
-  margin-top: 10px;
+  text-align: left;
+  margin-top: 20px;
   font-weight: 500;
   color: rgba(57, 63, 65, 1);
 }
@@ -102,7 +108,7 @@
 
 .btn-primary img{
   vertical-align: middle;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .group{
@@ -117,6 +123,10 @@
   font-family: 'Instruments Sans';
   font-weight: bolder;
   padding: 3px; 
+}
+
+input::placeholder{
+  color: rgba(170, 177, 183, 1);
 }
 
 .left{
@@ -238,4 +248,3 @@ h2{
   color: rgba(135, 140, 144, 1);
 
 }
-
