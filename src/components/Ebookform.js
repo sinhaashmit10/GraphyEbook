@@ -1,19 +1,32 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
-function EbookForm(setState) {
-
+function EbookForm() {
   const [text, setText] = useState('');
-  const [subject, setSubject] = useState ('');
-  
-  const handleOnChangeName = (event)=> {
-    setText(event.target.value)
-    
-  }
+  const [subject, setSubject] = useState('');
+  const [suggestionContents, setSuggestionContents] = useState([
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+    'Suggestion content',
+  ]);
 
-  const handleOnChangeSubject = (event)=> {
-    setSubject(event.target.value)
-  }
+  const handleOnChangeName = (event) => {
+    setText(event.target.value);
+  };
+
+  const handleOnChangeSubject = (event) => {
+    setSubject(event.target.value);
+  };
+
   const fetchImageFromUnsplash = async (subject) => {
     try {
       const response = await axios.get(
@@ -23,72 +36,66 @@ function EbookForm(setState) {
       if (response.data.urls && response.data.urls.regular) {
         const coverImage = document.getElementById('coverImage');
         coverImage.src = response.data.urls.regular;
+
+        // Set the title and author after fetching image
+        document.querySelector('.enterTitle').textContent = subject; // Set the title to the subject
+        document.querySelector('.bytext').textContent = `By: ${text}`; // Set the author to the name
+
+        // Update suggestion contents
+        setSuggestionContents((prevContents) => [
+          subject, // Display the subject in the first suggestion
+          ...prevContents.slice(0, -1), // Remove the last suggestion
+        ]);
       }
     } catch (error) {
       console.error('Error fetching image:', error);
     }
   };
 
-  const handleOnCLick = () =>{
-    fetchImageFromUnsplash(subject);
-  }
-  
-  const suggestions = [
-    // { title: 'Suggestion ', content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-    {  content: 'Suggestion content ' },
-  ];
-
   return (
     <>
-    <div className="ebook-form-container">
-      <h2>Generate ebook with AI</h2>
-      <div className="form-group">
-        <label className = "form-header" htmlFor="name">Name:</label>
-        <input
-          type="text"
-          className="form-control"
-          id="name"
-          placeholder="Enter your name"
-          value={text}
-          onChange={handleOnChangeName}
-        />
-      </div>
-      <div className="form-group">
-        <label className = "form-header" htmlFor="subject">Subject of ebook:</label>
-        <input
-          type="text"
-          className="form-control"
-          id="subject"
-          placeholder="Enter the subject of your ebook"
-          value={subject}
-          onChange={handleOnChangeSubject}
-        />
-      </div>
-    </div>
-    <div className="suggestion-cards-container">
-    {suggestions.map((suggestion, index) => (
-      <div className="card" key={index}>
-        <div className="card-body">
-          <h5 className="card-title">{suggestion.title}</h5>
-          <p className="card-text">{suggestion.content}</p>
+      <div className="ebook-form-container">
+        <h2>Generate ebook with AI</h2>
+        <div className="form-group">
+          <label className="form-header" htmlFor="name">
+            Name:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            placeholder="Enter your name"
+            value={text}
+            onChange={handleOnChangeName}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-header" htmlFor="subject">
+            Subject of ebook:
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="subject"
+            placeholder="Enter the subject of your ebook"
+            value={subject}
+            onChange={handleOnChangeSubject}
+          />
         </div>
       </div>
-    ))}
-  </div>
-  {/* eslint-disable-next-line */}
-    <button className="btn btn-primary mt-3" onClick={handleOnCLick}><img src="star.png" width="15"/>Generate Cover</button>
-  </>
+      <div className="suggestion-cards-container">
+        {suggestionContents.map((content, index) => (
+          <div className="card" key={index}>
+            <div className="card-body">
+              <p className="card-text">{content}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <button className="btn btn-primary mt-3" onClick={() => fetchImageFromUnsplash(subject)}>
+        <img src="star.png" width="15" alt=''/>Generate Cover
+      </button>
+    </>
   );
 }
 
