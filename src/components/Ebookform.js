@@ -83,6 +83,7 @@ function EbookForm() {
           />
         </div>
       </div>
+      <label className='contentLabel' htmlFor="contentLabel">Suggestion based on subject & history</label>
       <div className="suggestion-cards-container">
         {suggestionContents.map((content, index) => (
           <div className="card" key={index}>

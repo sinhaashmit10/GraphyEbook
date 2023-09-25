@@ -183,6 +183,7 @@ font-family: 'Instrument Sans';
 h8{
   padding-left: 30px;
   font-weight: 600;
+  
 }
 
 h5{
@@ -215,4 +216,14 @@ h1{
 .card-image-top{
   width: 600px;
   height: 205px;
+}
+
+#coverImage{
+  border-radius: 10px;
+}
+
+.contentLabel{
+  margin-left: 25px;
+  color: rgba(135, 140, 144, 1);
+
 }
