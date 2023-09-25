@@ -2,6 +2,7 @@ import React from 'react';
 
 export default function SideView() {
   return (
+    <>
     <div className="card-side">
      
       <img
@@ -12,8 +13,11 @@ export default function SideView() {
         alt=""
       />
       <h1 className="enterTitle">E-Book <br />Title</h1>
-      <p className="bytext">By: Author Name</p>
-      <h5 className="sideh5">GRAPHY</h5>
+      <div>
+        <p className="bytext">By: Author Name</p>
+        <h5 className="sideh5">GRAPHY</h5>
     </div>
+    </div>
+    </>
   );
 }

@@ -182,13 +182,15 @@ font-family: 'Instrument Sans';
   font-size: 60px;
   /* padding-bottom: 90px; */
   color: rgba(35, 34, 40, 1);
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .bytext{
+  position: absolute;
+  bottom: 90px;
   margin-left: 30px;
   font-weight: 600;
-  margin-top: 12%;
+  margin-bottom: 0;
   width: 400px;
 }
 
@@ -201,7 +203,9 @@ h5{
 }
 
 .sideh5{
-  float: right;
+  position: absolute;
+  bottom: 70px;
+  right: 40px;
   margin-right: 30px;
   font-weight:bolder;
   color: rgba(58, 61, 80, 1);
