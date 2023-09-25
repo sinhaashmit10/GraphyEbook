@@ -85,6 +85,9 @@
   font-size: 1.1rem;
   /* text-align: center; */
   margin: 15px;
+  font-weight: 500;
+  color: rgba(57, 63, 65, 1);
+
 }
 
 .btn-primary {
@@ -211,6 +214,8 @@ h2{
 h1{
   font-weight: bolder;
   margin-top: 25px;
+  color: rgba(35, 34, 40, 1);
+
 }
 
 .card-image-top{
