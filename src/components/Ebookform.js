@@ -24,7 +24,10 @@ function EbookForm() {
   };
 
   const handleOnChangeSubject = (event) => {
-    setSubject(event.target.value);
+    const inputValue = event.target.value;
+    if (inputValue.length <= 30) {
+      setSubject(inputValue);
+    }
   };
 
   const fetchImageFromUnsplash = async (subject) => {

@@ -11,8 +11,8 @@ export default function SideView() {
         className="card-img-top"
         alt=""
       />
-      <h1 className="enterTitle">E-Book Title</h1>
-      <h8 className="bytext">By: Author Name</h8>
+      <h1 className="enterTitle">E-Book <br />Title</h1>
+      <p className="bytext">By: Author Name</p>
       <h5 className="sideh5">GRAPHY</h5>
     </div>
   );

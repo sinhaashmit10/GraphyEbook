@@ -109,7 +109,7 @@
 }
 
 .form-header{
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: 'Instruments Sans';
   font-weight: bolder;
   padding: 3px; 
 }
@@ -176,17 +176,20 @@ font-family: 'Instrument Sans';
 }
 
 .enterTitle{
-  width: 300px;
+  width: 600px;
   padding-left: 30px;
   font-weight: 1000;
   font-size: 60px;
-  padding-bottom: 60px;
+  /* padding-bottom: 90px; */
+  color: rgba(35, 34, 40, 1);
+  margin-top: 10px;
 }
 
-h8{
-  padding-left: 30px;
+.bytext{
+  margin-left: 30px;
   font-weight: 600;
-  
+  margin-top: 12%;
+  width: 400px;
 }
 
 h5{
@@ -211,12 +214,6 @@ h2{
 
 }
 
-h1{
-  font-weight: bolder;
-  margin-top: 25px;
-  color: rgba(35, 34, 40, 1);
-
-}
 
 .card-image-top{
   width: 600px;
@@ -232,3 +229,4 @@ h1{
   color: rgba(135, 140, 144, 1);
 
 }
+
