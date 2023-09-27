@@ -39,7 +39,7 @@
 }
 
 .app-container {
-  width: 95%;
+  width: 100%;
   margin: 0 auto; /* Center the container horizontally */
   float: left;
   font-family: 'Instrument Sans';
@@ -99,7 +99,7 @@
   width: 139.95px;
   height: 32px;
   align-self: flex-end;
-  margin-left: 600px;
+   margin-left: 600px;
   font-size: 12px;
   background-color: #6059FF;
   border: none;
@@ -109,6 +109,40 @@
 .btn-primary img{
   vertical-align: middle;
   margin-right: 10px;
+}
+
+.btn-outline-secondary{
+  width: 130px;
+  height: 32px;
+  font-family: 'Instrument Sans';
+  align-self: flex-end;
+  font-size: 12px;
+  color: rgba(96, 89, 255, 1);
+  font-weight: 800;
+  border-color: #6059FF;
+}
+
+.btn-outline-secondary img{
+  vertical-align: middle;
+  margin-right: 10px;
+  
+}
+
+.btn-info{
+  width: 60px;
+  height: 32px;
+  color: rgba(255, 255, 255, 1);
+  font-size: 12px;
+  font-family: 'Instrument Sans';
+  background: rgba(96, 89, 255, 1);
+  border-color: #6059FF;
+}
+
+.mt-3{
+  font-size: 12px;
+  float: right;
+  font-family: 'Instrument Sans';
+  margin-right: 20px;
 }
 
 .group{

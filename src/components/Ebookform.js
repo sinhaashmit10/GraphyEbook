@@ -18,6 +18,7 @@ function EbookForm() {
     'Suggestion content',
     'Suggestion content',
   ]);
+  const [showGenerateButton, setShowGenerateButton] = useState(true);
 
   const handleOnChangeName = (event) => {
     setText(event.target.value);
@@ -49,10 +50,39 @@ function EbookForm() {
           subject, // Display the subject in the first suggestion
           ...prevContents.slice(0, -1), // Remove the last suggestion
         ]);
+
+        // Hide the "Generate Cover" button and show "Regenerate" and "Next" buttons
+        setShowGenerateButton(false);
       }
     } catch (error) {
       console.error('Error fetching image:', error);
     }
+  };
+
+  const renderButtons = () => {
+    if (showGenerateButton) {
+      return (
+        <button className="btn btn-primary mt-3" onClick={() => fetchImageFromUnsplash(subject)}>
+          <img src="star.png" width="15" alt=''/>Generate Cover
+        </button>
+      );
+    } else {
+      return (
+        <div className="mt-3">
+          <button className="btn btn-outline-secondary mx-2" onClick={() => fetchImageFromUnsplash(subject)}>
+            <img src="redo.png" width="15" alt=''/>Regenerate
+          </button>
+          <button className="btn btn-info ml-2" onClick={() => handleNextClick()}>
+            Next
+          </button>
+        </div>
+      );
+    }
+  };
+
+  const handleNextClick = () => {
+    // Add your next functionality here when the "Next" button is clicked.
+    // You can define the behavior of the "Next" button in this function.
   };
 
   return (
@@ -97,9 +127,7 @@ function EbookForm() {
           </div>
         ))}
       </div>
-      <button className="btn btn-primary mt-3" onClick={() => fetchImageFromUnsplash(subject)}>
-        <img src="star.png" width="15" alt=''/>Generate Cover
-      </button>
+      {renderButtons()}
     </>
   );
 }
