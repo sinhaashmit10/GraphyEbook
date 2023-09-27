@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function EbookForm() {
   const [text, setText] = useState('');
@@ -72,7 +73,7 @@ function EbookForm() {
           <button className="btn btn-outline-secondary mx-2" onClick={() => fetchImageFromUnsplash(subject)}>
             <img src="redo.png" width="15" alt=''/>Regenerate
           </button>
-          <button className="btn btn-info ml-2" onClick={() => handleNextClick()}>
+          <button className="btn btn-info ml-2" onClick={handleNextClick}>
             Next
           </button>
         </div>
@@ -80,9 +81,12 @@ function EbookForm() {
     }
   };
 
+  // Define navigate from the hook
+  const navigate = useNavigate();
+
   const handleNextClick = () => {
-    // Add your next functionality here when the "Next" button is clicked.
-    // You can define the behavior of the "Next" button in this function.
+    // Navigate to KeyTopics.js when the "Next" button is clicked
+    navigate('/KeyTopics');
   };
 
   return (
