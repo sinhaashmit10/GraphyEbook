@@ -1,16 +1,16 @@
 import './App.css';
-import EbookState from './Context/EbookState';
+// import Ebook from './components/Ebook';
 
 import Left from './components/Left';
 import Right from './components/Right';
 
 function App() {
   return (
+  
     <>
-    <EbookState>
     <Left/>
     <Right/>
-    </EbookState>
+    {/* <Ebook/> */}
     </>
   );
 }

@@ -1,6 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function KeyTopics() {
+  const navigate = useNavigate();
+
+  const handleOnCLick = () => {
+  navigate('/Ebook')
+}
+
   return (
     <div className='ebook-form-container'>
       <h2>Generate ebook with AI</h2>
@@ -81,7 +88,7 @@ export default function KeyTopics() {
         </div>
       </div>
       
-      <button className="btn btn-success mt-3" >
+      <button className="btn btn-success mt-3" onClick={handleOnCLick} >
           <img src="star.png" width="15" alt=''/>Generate ebook
         </button>
     </div>

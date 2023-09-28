@@ -327,3 +327,27 @@ h2{
 
 }
 
+.logo-display{
+  position: absolute;
+  bottom: 40px;
+}
+
+.card-side2{
+  width: 90%; /* Calculate card width with spacing */
+  height: 650px;
+  margin-bottom: 25px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 40px;
+  margin-right: 50px;
+  margin-top: 60px;
+  background-color: white;
+}
+
+.ebookdisplay-header{
+  position: absolute;
+  left: 20px;
+  top: 70px;
+}
