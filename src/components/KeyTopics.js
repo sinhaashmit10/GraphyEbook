@@ -5,8 +5,8 @@ export default function KeyTopics() {
     <div className='ebook-form-container'>
       <h2>Generate ebook with AI</h2>
       <div className="form-group">
-        <label className="form-header" htmlFor="name">
-          Name:
+        <label className="form-header" htmlFor="topics">
+          Key Topics
         </label>
         <input
           type='text'
