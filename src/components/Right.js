@@ -6,7 +6,7 @@ export default function Right() {
   return (
     <div>
         <div className="right">
-            <SideView title="E-Book Title" author = "Author Name"/>
+            <SideView/>
         </div>
     </div>
   )

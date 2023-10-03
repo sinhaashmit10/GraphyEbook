@@ -1,14 +1,21 @@
 import React from 'react';
 
-export default function EbookDisplay({ content }) {
+export default function EbookDisplay({ ebookContent }) {
+  console.log('Ebook Content:', ebookContent); // Check if ebookContent is received
+
+  if (!ebookContent) {
+    return (
+      <div className='card-side2'>
+        <p>No ebook content available.</p>
+      </div>
+    );
+  }
+
   return (
     <div className='card-side2'>
-      {/* <h2 className='ebookdisplay-header'>Generated Ebook</h2> */}
-      <div className="ebook-content">
-        {/* Display the generated ebook content */}
-        <p>{content}</p>
-        <h5 className='logo-display'>GRAPHY</h5>
-      </div>
+      {/* Display the generated ebook content */}
+      <p>{ebookContent}</p>
+      <h5 className='logo-display'>GRAPHY</h5>
     </div>
   );
 }
