@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function KeyTopics() {
   const navigate = useNavigate();
   const [selectedAudience, setSelectedAudience] = useState('');
   const [keyTopics, setKeyTopics] = useState('');
-  const apiKey = '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'; // Replace with your actual GPT-3 API key
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY; // Replace with your actual GPT-3 API key
 
   const handleRadioChange = (e) => {
     setSelectedAudience(e.target.value);
