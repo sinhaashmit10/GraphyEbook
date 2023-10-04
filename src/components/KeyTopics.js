@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+// KeyTopics.js
+import React, { useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 
 export default function KeyTopics() {
   const navigate = useNavigate();
@@ -16,25 +16,7 @@ export default function KeyTopics() {
     setKeyTopics(e.target.value);
   };
 
-  const handleOnClick = async () => {
-    // Validate if keyTopics and selectedAudience are not empty
-    if (!keyTopics.trim()) {
-      alert('Please enter key topics.');
-      return;
-    }
-
-    // Call GPT-3 API to generate the ebook content
-    try {
-      const ebookContent = await generateEbookContent(keyTopics);
-      // Navigate to EbookDisplay and pass ebookContent
-      navigate('/Ebook', { state: { ebookContent } });
-    } catch (error) {
-      console.error('Error generating ebook content:', error);
-      alert('Failed to generate the ebook content. Please try again later.');
-    }
-  };
-
-  const generateEbookContent = async (keyTopics) => {
+  const generateEbookContent = async (keyTopics, subject, selectedAudience) => {
     try {
       const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
         method: 'POST',
@@ -43,20 +25,31 @@ export default function KeyTopics() {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          prompt: `Generate an ebook about ${keyTopics} for ${selectedAudience}.`,
+          prompt:`Generate a 5-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.`,
           max_tokens: 1000, // Adjust as needed
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        // Extract and return the generated ebook content
-        return data.choices[0].text;
+        console.log('API Response:', data); // Log the API response
+
+        const ebookContent = data.choices[0].text;
+
+        // Pass ebookContent as route state when navigating to Ebook
+        navigate('/Ebook', { state: { ebookContent } });
       } else {
         throw new Error('Failed to generate ebook content');
       }
     } catch (error) {
-      throw error;
+      console.error('Error generating ebook content:', error);
+      alert('Failed to generate the ebook content. Please try again later.');
+    }
+  };
+
+  const handleGenerateClick = () => {
+    if (keyTopics.trim() && selectedAudience) {
+      generateEbookContent(keyTopics);
     }
   };
 
@@ -103,7 +96,7 @@ export default function KeyTopics() {
         </div>
       </div>
       
-      <button className="btn btn-success mt-3" onClick={handleOnClick}>
+      <button className="btn btn-success mt-3" onClick={handleGenerateClick}>
         <img src="star.png" width="15" alt=''/>Generate ebook
       </button>
     </div>

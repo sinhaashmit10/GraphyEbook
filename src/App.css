@@ -344,6 +344,7 @@ h2{
   margin-right: 50px;
   margin-top: 60px;
   /* background-color: white; */
+  overflow: auto;
 }
 
 .ebookdisplay-header{

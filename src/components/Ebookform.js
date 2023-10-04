@@ -34,8 +34,9 @@ function EbookForm() {
 
   const fetchImageFromUnsplash = async (subject) => {
     try {
+      const unsplashApiKey = process.env.REACT_APP_UNSPLASH_API_KEY;
       const response = await axios.get(
-        `https://api.unsplash.com/photos/random/?query=${subject}&orientation=landscape&client_id=TfFspVHomEw5kDLWlGdD5viE3UGoRZGn9810NF6U1M0`
+        `https://api.unsplash.com/photos/random/?query=${subject}&orientation=landscape&client_id=${unsplashApiKey}`
       );
 
       if (response.data.urls && response.data.urls.regular) {
@@ -86,7 +87,7 @@ function EbookForm() {
 
   const handleNextClick = () => {
     // Navigate to KeyTopics.js when the "Next" button is clicked
-    navigate('/KeyTopics');
+    navigate('/KeyTopics', { state: { subject } });
   };
 
   return (
