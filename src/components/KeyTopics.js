@@ -88,7 +88,7 @@ export default function KeyTopics() {
                 />
                 <label className="form-check-label" htmlFor={`flexRadioDefault${audience}`}>
                   {audience}
-                  <img src={`${audience.toLowerCase()}.png`} style={{ maxWidth: '25px', maxHeight: '25px' }} alt="" />
+                  <img src={`${audience.toLowerCase()}.png`} alt="" />
                 </label>
               </div>
             </div>

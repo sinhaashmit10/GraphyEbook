@@ -53,11 +53,15 @@
   font-weight: 500;
   display: flex;
   flex-direction: column;
+  margin-bottom: 2px;
+}
+
+.form-group{
+  margin-bottom: 10px;
 }
 
 .suggestion-cards-container {
   width: 95%; 
-  /* margin: 20px; */
   margin-left: 20px;
   display: flex;
   flex-wrap: wrap;
@@ -68,17 +72,16 @@
 
 
 .card {
-  width: 180px; /* Calculate card width with spacing */
+  width: 175px; /* Calculate card width with spacing */
   margin-bottom: 10px;
   height: 110px;
   border-radius: 10px;
+  background: linear-gradient(45deg, #E5E5E5 0%, #E5E5E5 50%, transparent 50%, transparent 100%),
+              linear-gradient(232.41deg, #E3EEFE 1.43%, #E3E7FE 11.74%, #FFFFFF 34.45%);
+  background-size: 100% 2px, 100% 100%; /* Adjust the gradient size as needed */
+  background-repeat: no-repeat;
 }
-/* 
-.card-title {
-  font-family: 'Instrument Sans';
-  font-size: 1.2rem;
-  font-weight: 1000;
-} */
+
 
 .card-body img{
   position: absolute;
@@ -149,7 +152,7 @@
   position: absolute;
   background-color: #6059FF;
   border: none;
-  bottom: 18px;
+  bottom: 16px;
 }
 
 .btn-success img{
@@ -176,6 +179,7 @@
   margin-top: 15px;
 }
 
+
 .form-check{
   margin-left: 10px;
   margin-top: 15px;
@@ -192,14 +196,14 @@
 }
 
 .form-check img{
+  width: 17px;
+  height: 17px;
   vertical-align: middle;
   margin-left: 50px;
-  justify-content: space-between;
 }
 
 .form-header{
-  font-family: 'Instruments Sans';
-  font-weight: bolder;
+  font-weight: 600;
   padding: 3px; 
 }
 
@@ -225,15 +229,14 @@ input::placeholder{
   linear-gradient(315deg, #FDA6FF 0%, #FFDF70 100%) bottom right;
   background-origin: border-box;
   background-clip: content-box, border-box, border-box, border-box;
-/* background-size: 50% 50%; */
-background-repeat: no-repeat;
-font-family: 'Instrument Sans';
+  background-repeat: no-repeat;
+  font-family: 'Instrument Sans';
 }
 
-.viewimage{
-  width: 768px;
-  height: 725px;
-}
+/* .viewimage{ */
+  /* width: 768px; */
+  /* height: 725px; */
+/* } */
 
 .card-side{
   width: 90%; /* Calculate card width with spacing */
@@ -249,31 +252,30 @@ font-family: 'Instrument Sans';
   background-color: white;
 }
 
-.cardText-side{
-  width: 90%; /* Calculate card width with spacing */
-  height: 80%;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  border-radius: 10px;
-  margin-left: 30px;
-  margin-right: 50px;
-  background-color: white;
-}
+/* .cardText-side{ */
+  /* width: 90%; Calculate card width with spacing */
+  /* height: 80%; */
+  /* margin-bottom: 20px; */
+  /* border: 1px solid #ccc; */
+  /* border-radius: 5px; */
+  /* padding: 10px; */
+  /* border-radius: 10px; */
+  /* margin-left: 30px; */
+  /* margin-right: 50px; */
+  /* background-color: white; */
+/* } */
 
-.sideimage{
+/* .sideimage{
   background-color: white;
   float: right;
   margin-right: 30px;
-}
+} */
 
 .enterTitle{
   width: 600px;
   padding-left: 30px;
   font-weight: 1000;
   font-size: 60px;
-  /* padding-bottom: 90px; */
   color: rgba(35, 34, 40, 1);
   margin-top: 30px;
 }
@@ -297,7 +299,7 @@ h5{
 
 .sideh5{
   position: absolute;
-  bottom: 70px;
+  bottom: 80px;
   right: 40px;
   margin-right: 30px;
   font-weight:bolder;
@@ -343,7 +345,6 @@ h2{
   margin-left: 40px;
   margin-right: 50px;
   margin-top: 60px;
-  /* background-color: white; */
   overflow: auto;
 }
 
