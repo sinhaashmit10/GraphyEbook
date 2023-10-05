@@ -6,7 +6,6 @@ import Right from './components/Right';
 
 function App() {
   return (
-  
     <>
     <Left/>
     <Right/>

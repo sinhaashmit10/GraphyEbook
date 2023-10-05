@@ -353,3 +353,40 @@ h2{
   left: 20px;
   top: 70px;
 }
+
+#pageCounter{
+  margin-top: 2rem;
+  margin-left: 1rem;
+  width: 135px;
+  height: 35px;
+  font-size: 12px;
+  color: #282c34;
+}
+
+.regen-ebook{
+  position: absolute;
+  right: 820px;
+  bottom: 43px;
+}
+
+.btn-light{
+  width: 130px;
+  height: 32px;
+  font-family: 'Instrument Sans';
+  font-size: 11px;
+  color: rgba(58, 61, 80, 1);
+  font-weight: 800;
+  border: 1px solid rgba(233, 233, 242, 1);
+  border-radius: 10px;
+}
+
+.btn-light img{
+  vertical-align: middle;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+#publish-button{
+  background-color: #6059FF;
+  color: white;
+}

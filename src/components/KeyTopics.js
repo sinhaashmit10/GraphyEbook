@@ -1,11 +1,12 @@
 // KeyTopics.js
-import React, { useState, } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function KeyTopics() {
   const navigate = useNavigate();
   const [selectedAudience, setSelectedAudience] = useState('');
   const [keyTopics, setKeyTopics] = useState('');
+  const [selectedPages, setSelectedPages] = useState(1); // Initialize with a default value
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY; // Replace with your actual GPT-3 API key
 
   const handleRadioChange = (e) => {
@@ -16,7 +17,11 @@ export default function KeyTopics() {
     setKeyTopics(e.target.value);
   };
 
-  const generateEbookContent = async (keyTopics, subject, selectedAudience) => {
+  const handlePagesChange = (pages) => {
+    setSelectedPages(pages);
+  };
+
+  const generateEbookContent = async (keyTopics, subject, selectedAudience, selectedPages) => {
     try {
       const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
         method: 'POST',
@@ -25,7 +30,7 @@ export default function KeyTopics() {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          prompt:`Generate a 5-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.`,
+          prompt: `Generate a ${selectedPages}-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.`,
           max_tokens: 1000, // Adjust as needed
         }),
       });
@@ -37,7 +42,7 @@ export default function KeyTopics() {
         const ebookContent = data.choices[0].text;
 
         // Pass ebookContent as route state when navigating to Ebook
-        navigate('/Ebook', { state: { ebookContent } });
+        navigate('/Ebook', { state: { ebookContent, subject, keyTopics, selectedAudience, selectedPages } });
       } else {
         throw new Error('Failed to generate ebook content');
       }
@@ -48,8 +53,8 @@ export default function KeyTopics() {
   };
 
   const handleGenerateClick = () => {
-    if (keyTopics.trim() && selectedAudience) {
-      generateEbookContent(keyTopics);
+    if (keyTopics.trim() && selectedAudience && selectedPages) {
+      generateEbookContent(keyTopics, selectedAudience, selectedPages);
     }
   };
 
@@ -94,10 +99,27 @@ export default function KeyTopics() {
             </div>
           ))}
         </div>
+        <div className="btn-group dropend">
+          <button id='pageCounter' className="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            No. of pages: {selectedPages}
+          </button>
+          <ul className="dropdown-menu">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((pages) => (
+              <li key={pages}>
+                <button
+                  className="dropdown-item"
+                  onClick={() => handlePagesChange(pages)}
+                >
+                  {pages}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-      
+
       <button className="btn btn-success mt-3" onClick={handleGenerateClick}>
-        <img src="star.png" width="15" alt=''/>Generate ebook
+        <img src="star.png" width="15" alt=''/> Generate ebook
       </button>
     </div>
   );

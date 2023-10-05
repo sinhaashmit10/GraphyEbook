@@ -16,7 +16,7 @@ export default function SideView({ enterTitle }) { // Accept enterTitle as a pro
       <div>
         <p className="bytext">By: Author Name</p>
         <h5 className="sideh5">GRAPHY</h5>
-    </div>
+      </div>
     </div>
     </>
   );
