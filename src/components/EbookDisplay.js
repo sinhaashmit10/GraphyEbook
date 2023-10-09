@@ -31,7 +31,7 @@ export default function EbookDisplay() {
           Make a proper list of contents with the names of the chapter with their respective page numbers. Divide the ebook pages properly and use 
           bold headings for every chapter. Feel free to use tables, datas, research reference etc. Write professional content as I will directly use
           the generated content in my Ebook. According to the number of pages, every page must contain atleast 100 words.`,
-          max_tokens: 3000, // Adjust as needed
+          max_tokens: 1000, // Adjust as needed
         }),
       });
 
@@ -63,7 +63,7 @@ export default function EbookDisplay() {
   if (!ebookContent) {
     return (
       <div className='card-side2'>
-        <p>Loading...</p>
+        <p className='loadingText'>Loading...</p>
       </div>
     );
   }

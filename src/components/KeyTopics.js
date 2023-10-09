@@ -151,7 +151,7 @@ export default function KeyTopics() {
       </div>
 
       <button className="btn btn-success mt-3" onClick={handleGenerateClick}>
-        <img src="star.png" width="15" alt=''/> Generate ebook
+        <img src="star.png" width="15" alt=''/>Generate ebook
       </button>
     </div>
   );
