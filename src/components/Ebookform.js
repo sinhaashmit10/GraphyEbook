@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import firebase from 'firebase/compat/app'; // Import the "compat" version of Firebase
+import 'firebase/compat/database'; // Import Firebase Realtime Database module
 
 function EbookForm() {
   const [text, setText] = useState('');
@@ -20,6 +22,18 @@ function EbookForm() {
     'Suggestion content',
   ]);
   const [showGenerateButton, setShowGenerateButton] = useState(true);
+
+  // Initialize Firebase with your Firebase configuration
+  const firebaseConfig = {
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const database = firebase.database();
 
   const handleOnChangeName = (event) => {
     setText(event.target.value);
@@ -55,10 +69,25 @@ function EbookForm() {
 
         // Hide the "Generate Cover" button and show "Regenerate" and "Next" buttons
         setShowGenerateButton(false);
+
+        // After fetching the image, save the name and subject to Firebase
+        saveDataToFirebase({ name: text, subject });
       }
     } catch (error) {
       console.error('Error fetching image:', error);
     }
+  };
+
+  const saveDataToFirebase = (data) => {
+    // Push the data to Firebase's "ebooks" node
+    const ebooksRef = database.ref('ebooks');
+    ebooksRef.push(data, (error) => {
+      if (error) {
+        console.error('Error saving data to Firebase:', error);
+      } else {
+        console.log('Data saved to Firebase successfully');
+      }
+    });
   };
 
   const renderButtons = () => {
@@ -86,7 +115,7 @@ function EbookForm() {
   const navigate = useNavigate();
 
   const handleNextClick = () => {
-    // Navigate to KeyTopics.js when the "Next" button is clicked
+    // Navigate to KeyTopics.js when the "Next" button is clicked and pass subject as a prop
     navigate('/KeyTopics', { state: { subject } });
   };
 

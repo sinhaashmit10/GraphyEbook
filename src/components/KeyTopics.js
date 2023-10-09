@@ -1,6 +1,8 @@
 // KeyTopics.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import firebase from 'firebase/compat/app'; // Import the "compat" version of Firebase
+import 'firebase/compat/database'; // Import Firebase Realtime Database module
 
 export default function KeyTopics() {
   const navigate = useNavigate();
@@ -8,6 +10,16 @@ export default function KeyTopics() {
   const [keyTopics, setKeyTopics] = useState('');
   const [selectedPages, setSelectedPages] = useState(1); // Initialize with a default value
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY; // Replace with your actual GPT-3 API key
+  const firebaseConfig = {
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const database = firebase.database();
 
   const handleRadioChange = (e) => {
     setSelectedAudience(e.target.value);
@@ -21,40 +33,60 @@ export default function KeyTopics() {
     setSelectedPages(pages);
   };
 
-  const generateEbookContent = async (keyTopics, subject, selectedAudience, selectedPages) => {
+  const generateEbookContent = async () => {
     try {
-      const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          prompt: `Generate a ${selectedPages}-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.`,
-          max_tokens: 1000, // Adjust as needed
-        }),
+      // Retrieve the subject from the last created data in the database
+      const ebooksRef = database.ref('ebooks');
+      ebooksRef.limitToLast(1).once('value', (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const data = childSnapshot.val();
+          const subject = data.subject;
+
+          // Use the subject in the API request
+          fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+              prompt: `Generate a ${selectedPages}-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.
+              Make a proper list of contents with the names of the chapter with their respective page numbers. Divide the ebook pages properly and use 
+              bold headings for every chapter. Feel free to use tables, datas, research reference etc. Write professional content as I will directly use
+              the generated content in my Ebook. According to the number of pages, every page must contain at least 100 words.`,
+              max_tokens: 1000, // Adjust as needed
+            }),
+          })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Failed to generate ebook content');
+            }
+          })
+          .then((data) => {
+            console.log('API Response:', data); // Log the API response
+
+            const ebookContent = data.choices[0].text;
+
+            // Pass ebookContent as route state when navigating to Ebook
+            navigate('/Ebook', { state: { ebookContent, subject, keyTopics, selectedAudience, selectedPages } });
+          })
+          .catch((error) => {
+            console.error('Error generating ebook content:', error);
+            alert('Failed to generate the ebook content. Please try again later.');
+          });
+        });
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('API Response:', data); // Log the API response
-
-        const ebookContent = data.choices[0].text;
-
-        // Pass ebookContent as route state when navigating to Ebook
-        navigate('/Ebook', { state: { ebookContent, subject, keyTopics, selectedAudience, selectedPages } });
-      } else {
-        throw new Error('Failed to generate ebook content');
-      }
     } catch (error) {
-      console.error('Error generating ebook content:', error);
-      alert('Failed to generate the ebook content. Please try again later.');
+      console.error('Error retrieving subject from Firebase:', error);
+      alert('Failed to retrieve subject from Firebase. Please try again later.');
     }
   };
 
   const handleGenerateClick = () => {
     if (keyTopics.trim() && selectedAudience && selectedPages) {
-      generateEbookContent(keyTopics, selectedAudience, selectedPages);
+      generateEbookContent();
     }
   };
 

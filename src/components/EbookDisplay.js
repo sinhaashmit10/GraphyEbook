@@ -1,53 +1,80 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// EbookDisplay.js:
+// EbookDisplay.js
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-export default function EbookDisplay({ ebookContent, selectedAudience, selectedPages, subject, keyTopics }) {
-  const navigate = useNavigate();
+export default function EbookDisplay() {
+  // const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const [ebookContent, setEbookContent] = useState('');
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const { selectedAudience, selectedPages, subject, keyTopics } = location.state;
 
-  const regenerateEbookContent = async () => {
+  useEffect(() => {
+    generateEbookContent();
+    // eslint-disable-next-line
+  }, []); // Fetch content on component mount
+
+  const generateEbookContent = async () => {
     try {
       setIsLoading(true);
 
-      const response = await fetch('https://api.openai.com/v1/engines/davinci/completions', {
+      const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          prompt: `Generate a ${selectedPages}-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.`,
-          max_tokens: 1000, // Adjust as needed
+          prompt: `Generate a ${selectedPages}-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.
+          Make a proper list of contents with the names of the chapter with their respective page numbers. Divide the ebook pages properly and use 
+          bold headings for every chapter. Feel free to use tables, datas, research reference etc. Write professional content as I will directly use
+          the generated content in my Ebook. According to the number of pages, every page must contain atleast 100 words.`,
+          max_tokens: 3000, // Adjust as needed
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log('API Response:', data);
-
-        const ebookContent = data.choices[0].text;
-
-        navigate('/Ebook', { state: { ebookContent } });
+        // console.log(data.choices);
+        const newEbookContent = data.choices[0].text;
+        // console.log(newEbookContent,">>>>>");
+        if(!newEbookContent)
+        setEbookContent("not-found");
+        else
+        setEbookContent(newEbookContent);
       } else {
-        throw new Error('Failed to regenerate ebook content');
+        throw new Error('Failed to generate ebook content');
       }
     } catch (error) {
-      console.error('Error regenerating ebook content:', error);
-      alert('Failed to regenerate the ebook content. Please try again later.');
+      console.error('Error generating ebook content:', error);
+      alert('Failed to generate the ebook content. Please try again later.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const regenerateEbookContent = () => {
+    generateEbookContent();
+  };
+
   if (!ebookContent) {
     return (
       <div className='card-side2'>
-        <p>No ebook content available.</p>
+        <p>Loading...</p>
       </div>
     );
   }
 
+  if (ebookContent==="not-found") {
+    return (
+      <div className='card-side2'>
+        <p>Ebook content not found.</p>
+      </div>
+    );
+  }
   return (
     <div className='card-side2'>
       <div className="ebook-content" style={{ maxHeight: '550px', overflow: 'auto' }}>
