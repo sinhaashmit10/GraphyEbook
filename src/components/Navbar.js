@@ -7,7 +7,7 @@ export default function Navbar() {
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
-            <h5>GRAPHY</h5>
+            <img src="graphylogo2.svg" alt="" className="graphyNavbarLogo" />
           </a>
           <button
             className="navbar-toggler"

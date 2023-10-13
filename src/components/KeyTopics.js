@@ -54,7 +54,7 @@ export default function KeyTopics() {
               Make a proper list of contents with the names of the chapter with their respective page numbers. Divide the ebook pages properly and use 
               bold headings for every chapter. Feel free to use tables, datas, research reference etc. Write professional content as I will directly use
               the generated content in my Ebook. According to the number of pages, every page must contain at least 100 words.`,
-              max_tokens: 1000, // Adjust as needed
+              max_tokens: 3000, // Adjust as needed
             }),
           })
           .then((response) => {
@@ -125,7 +125,7 @@ export default function KeyTopics() {
                 />
                 <label className="form-check-label" htmlFor={`flexRadioDefault${audience}`}>
                   {audience}
-                  <img src={`${audience.toLowerCase()}.png`} alt="" />
+                  <img src={`${audience.toLowerCase()}.svg`} alt="" />
                 </label>
               </div>
             </div>
@@ -151,7 +151,7 @@ export default function KeyTopics() {
       </div>
 
       <button className="btn btn-success mt-3" onClick={handleGenerateClick}>
-        <img src="star.png" width="15" alt=''/>Generate ebook
+        <img src="star.svg" width="15" alt=''/>Generate ebook
       </button>
     </div>
   );

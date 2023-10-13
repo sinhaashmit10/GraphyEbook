@@ -45,6 +45,10 @@
   font-family: 'Instrument Sans';
 }
 
+.graphyNavbarLogo{
+  margin-left: 10px;
+}
+
 .ebook-form-container{
   width: 95%; 
   float: left; 
@@ -61,8 +65,8 @@
 }
 
 .suggestion-cards-container {
-  width: 95%; 
-  margin-left: 20px;
+  width: 95%;
+  margin: 0 auto; /* Center the container horizontally */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -71,8 +75,9 @@
 }
 
 
+
 .card {
-  width: 175px; /* Calculate card width with spacing */
+  width: 24%; /* Calculate card width with spacing */
   margin-bottom: 10px;
   height: 110px;
   border-radius: 10px;
@@ -148,11 +153,12 @@
   border-radius: 8px;
   padding: 12px,16px,12px,12px;
   gap: 8px;
-  margin-left: 576px;
+  /* margin-left: 576px; */
   position: absolute;
   background-color: #6059FF;
   border: none;
-  bottom: 16px;
+  bottom: 3.5%;
+  left: 39.34%;
 }
 
 .btn-success img{
@@ -240,17 +246,18 @@ input::placeholder{
 
 .card-side{
   width: 90%; /* Calculate card width with spacing */
-  height: 650px;
+  height: 655px;
   margin-bottom: 40px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 10px;
   margin-left: 40px;
   margin-right: 50px;
   margin-top: 40px;
   background-color: white;
 }
+
 
 /* .cardText-side{ */
   /* width: 90%; Calculate card width with spacing */
@@ -282,29 +289,29 @@ input::placeholder{
 
 .bytext{
   position: absolute;
-  bottom: 90px;
+  bottom: 12%;
   margin-left: 30px;
   font-weight: 600;
   margin-bottom: 0;
   width: 400px;
 }
 
+
 h5{
   font-weight: bolder;
   color: rgba(58, 61, 80, 1);
   margin-left: 10px;
-  letter-spacing: 0.1cap;
-  
+  letter-spacing: 0.1cap; 
 }
 
-.sideh5{
+.graphyLogoSideView{
   position: absolute;
-  bottom: 80px;
-  right: 40px;
+  bottom: 11%;
+  right: 3%;
   margin-right: 30px;
-  font-weight:bolder;
+  /* font-weight:bolder;
   color: rgba(58, 61, 80, 1);
-  letter-spacing: 0.1cap;
+  letter-spacing: 0.1cap; */
 }
 
 h2{
@@ -313,14 +320,17 @@ h2{
 
 }
 
-
+/* 
 .card-image-top{
   width: 600px;
   height: 205px;
-}
+} */
 
 #coverImage{
-  border-radius: 10px;
+  max-width: 100%;
+  max-height: 300px;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
 }
 
 .contentLabel{
@@ -331,7 +341,8 @@ h2{
 
 .logo-display{
   position: absolute;
-  bottom: 40px;
+  bottom: 6.8%;
+  left: 4%;
 }
 
 .card-side2{

@@ -94,14 +94,14 @@ function EbookForm() {
     if (showGenerateButton) {
       return (
         <button className="btn btn-primary mt-3" onClick={() => fetchImageFromUnsplash(subject)}>
-          <img src="star.png" width="15" alt=''/>Generate Cover
+          <img src="star.svg" width="15" alt=''/>Generate Cover
         </button>
       );
     } else {
       return (
         <div className="mt-3">
           <button className="btn btn-outline-secondary mx-2" onClick={() => fetchImageFromUnsplash(subject)}>
-            <img src="redo.png" width="15" alt=''/>Regenerate
+            <img src="redo.svg" width="15" alt=''/>Regenerate
           </button>
           <button className="btn btn-info ml-2" onClick={handleNextClick}>
             Next

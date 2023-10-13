@@ -31,7 +31,7 @@ export default function EbookDisplay() {
           Make a proper list of contents with the names of the chapter with their respective page numbers. Divide the ebook pages properly and use 
           bold headings for every chapter. Feel free to use tables, datas, research reference etc. Write professional content as I will directly use
           the generated content in my Ebook. According to the number of pages, every page must contain atleast 100 words.`,
-          max_tokens: 1000, // Adjust as needed
+          max_tokens: 3000, // Adjust as needed
         }),
       });
 
@@ -80,16 +80,16 @@ export default function EbookDisplay() {
       <div className="ebook-content" style={{ maxHeight: '550px', overflow: 'auto' }}>
         <p>{ebookContent}</p>
       </div>
-      <h5 className='logo-display'>GRAPHY</h5>
+      <img src="graphylogo2.svg" alt="" className="logo-display" />
       <div className='regen-ebook'>
         <button className="btn btn-light mx-1" onClick={regenerateEbookContent} disabled={isLoading}>
-          {isLoading ? "Regenerating..." : <><img src="redoblack.png" width="15" alt='' /> Regenerate</>}
+          {isLoading ? "Regenerating..." : <><img src="redoblack.svg" width="15" alt='' /> Regenerate</>}
         </button>
         <button className='btn btn-light mx-1'>
-          <img src="./download.png" alt="" /> Download PDF
+          <img src="./download.svg" alt="" /> Download PDF
         </button>
         <button id='publish-button' className='btn btn-light mx-1'>
-          <img src="./star.png" alt="" /> Publish ebook
+          <img src="./star.svg" alt="" /> Publish ebook
         </button>
       </div>
     </div>
