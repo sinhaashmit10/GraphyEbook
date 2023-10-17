@@ -1,10 +1,7 @@
-// EbookDisplay.js:
-// EbookDisplay.js
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export default function EbookDisplay() {
-  // const navigate = useNavigate();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [ebookContent, setEbookContent] = useState('');
@@ -12,9 +9,12 @@ export default function EbookDisplay() {
   const { selectedAudience, selectedPages, subject, keyTopics } = location.state;
 
   useEffect(() => {
-    generateEbookContent();
+    if (!ebookContent) {
+      // Only generate content when it's not already available
+      generateEbookContent();
+    }
     // eslint-disable-next-line
-  }, []); // Fetch content on component mount
+  }, []); // Fetch content on component mount only if not available
 
   const generateEbookContent = async () => {
     try {
@@ -27,10 +27,17 @@ export default function EbookDisplay() {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          prompt: `Generate a ${selectedPages}-page ebook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for a ${selectedAudience}.
-          Make a proper list of contents with the names of the chapter with their respective page numbers. Divide the ebook pages properly and use 
-          bold headings for every chapter. Feel free to use tables, datas, research reference etc. Write professional content as I will directly use
-          the generated content in my Ebook. According to the number of pages, every page must contain atleast 100 words.`,
+          prompt: `Generate a ${selectedPages}-page eBook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for 
+                    a ${selectedAudience}. The eBook should provide detailed and comprehensive information about the following key 
+                    topics: ${keyTopics}. Each page in the eBook should contain a minimum of 1000 words to ensure thorough coverage of the 
+                    subject matter. Please ensure that the eBook is well-structured and organized. Create a proper table of contents with 
+                    the names of each chapter and their respective page numbers. Additionally, use bold headings to clearly delineate different 
+                    sections within the eBook. Feel free to incorporate relevant tables, data, research references, and visual elements to 
+                    enhance the content. The content should be written in a professional and informative style, as it will be used directly in 
+                    the eBook. Make sure to maintain the quality and consistency of the content throughout the eBook, ensuring that it provides 
+                    valuable insights and knowledge to the selected audience. Your eBook should be an informative and engaging resource for 
+                    readers, offering them a comprehensive understanding of the subject and key topics, while also meeting the requirement of a 
+                    minimum of 1000 words per page.`,
           max_tokens: 3000, // Adjust as needed
         }),
       });
@@ -38,13 +45,13 @@ export default function EbookDisplay() {
       if (response.ok) {
         const data = await response.json();
         console.log('API Response:', data);
-        // console.log(data.choices);
         const newEbookContent = data.choices[0].text;
-        // console.log(newEbookContent,">>>>>");
-        if(!newEbookContent)
-        setEbookContent("not-found");
-        else
-        setEbookContent(newEbookContent);
+
+        if (!newEbookContent) {
+          setEbookContent("not-found");
+        } else {
+          setEbookContent(newEbookContent);
+        }
       } else {
         throw new Error('Failed to generate ebook content');
       }
@@ -60,15 +67,15 @@ export default function EbookDisplay() {
     generateEbookContent();
   };
 
-  if (!ebookContent) {
+  if (isLoading) {
     return (
       <div className='card-side2'>
-        <p className='loadingText'>Loading...</p>
+        <div className='loadingSpinner'></div>
       </div>
     );
   }
 
-  if (ebookContent==="not-found") {
+  if (ebookContent === "not-found") {
     return (
       <div className='card-side2'>
         <p>Ebook content not found.</p>
@@ -80,12 +87,13 @@ export default function EbookDisplay() {
       <div className="ebook-content" style={{ maxHeight: '550px', overflow: 'auto' }}>
         <p>{ebookContent}</p>
       </div>
-      <img src="graphylogo2.svg" alt="" className="logo-display" />
+
       <div className='regen-ebook'>
-        <button className="btn btn-light mx-1" onClick={regenerateEbookContent} disabled={isLoading}>
+        <img src="graphylogo2.svg" alt="" className="logo-display" />
+        <button id='regen-button' className="btn btn-light mx-1" onClick={regenerateEbookContent} disabled={isLoading}>
           {isLoading ? "Regenerating..." : <><img src="redoblack.svg" width="15" alt='' /> Regenerate</>}
         </button>
-        <button className='btn btn-light mx-1'>
+        <button id='download-button' className='btn btn-light mx-1'>
           <img src="./download.svg" alt="" /> Download PDF
         </button>
         <button id='publish-button' className='btn btn-light mx-1'>

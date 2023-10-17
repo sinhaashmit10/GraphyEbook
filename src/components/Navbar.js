@@ -1,4 +1,4 @@
-import React from 'react'; // Import your SignUpModal component here
+import React from 'react'; 
 
 export default function Navbar() {
 
@@ -27,7 +27,7 @@ export default function Navbar() {
               </button>
               <button
                 className="btn btn-outline-primary"
-                type="button" // Open the Sign Up modal
+                type="button" 
               >
                 Sign Up
               </button>

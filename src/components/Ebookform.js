@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app'; // Import the "compat" version of Firebase
 import 'firebase/compat/database'; // Import Firebase Realtime Database module
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function EbookForm() {
   const [text, setText] = useState('');
@@ -34,6 +36,7 @@ function EbookForm() {
   }
 
   const database = firebase.database();
+  const navigate = useNavigate();
 
   const handleOnChangeName = (event) => {
     setText(event.target.value);
@@ -47,6 +50,11 @@ function EbookForm() {
   };
 
   const fetchImageFromUnsplash = async (subject) => {
+    if (!text || !subject) {
+      showEmptyFieldsToast();
+      return;
+    }
+
     try {
       const unsplashApiKey = process.env.REACT_APP_UNSPLASH_API_KEY;
       const response = await axios.get(
@@ -72,10 +80,27 @@ function EbookForm() {
 
         // After fetching the image, save the name and subject to Firebase
         saveDataToFirebase({ name: text, subject });
+      } else {
+        showImageFetchErrorToast();
       }
     } catch (error) {
       console.error('Error fetching image:', error);
+      showImageFetchErrorToast();
     }
+  };
+
+  const showEmptyFieldsToast = () => {
+    toast.error('Please fill all the details.', {
+      autoClose: 5000,
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
+  const showImageFetchErrorToast = () => {
+    toast.error('Unable to fetch image, please try again.', {
+      autoClose: 5000,
+      position: toast.POSITION.TOP_CENTER,
+    });
   };
 
   const saveDataToFirebase = (data) => {
@@ -110,9 +135,6 @@ function EbookForm() {
       );
     }
   };
-
-  // Define navigate from the hook
-  const navigate = useNavigate();
 
   const handleNextClick = () => {
     // Navigate to KeyTopics.js when the "Next" button is clicked and pass subject as a prop
@@ -162,6 +184,7 @@ function EbookForm() {
         ))}
       </div>
       {renderButtons()}
+      <ToastContainer />
     </>
   );
 }

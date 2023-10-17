@@ -7,9 +7,10 @@ import Right from './components/Right';
 function App() {
   return (
     <>
+    <div className="appEbook">
     <Left/>
     <Right/>
-    {/* <Ebook/> */}
+    </div>
     </>
   );
 }
