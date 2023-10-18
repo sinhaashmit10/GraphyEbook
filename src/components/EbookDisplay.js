@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import Modal from 'react-modal';
 
 export default function EbookDisplay() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [ebookContent, setEbookContent] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [email, setEmail] = useState('');
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
   const { selectedAudience, selectedPages, subject, keyTopics } = location.state;
 
   useEffect(() => {
     if (!ebookContent) {
-      // Only generate content when it's not already available
       generateEbookContent();
     }
     // eslint-disable-next-line
-  }, []); // Fetch content on component mount only if not available
+  }, []);
 
   const generateEbookContent = async () => {
     try {
@@ -44,7 +46,6 @@ export default function EbookDisplay() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
         const newEbookContent = data.choices[0].text;
 
         if (!newEbookContent) {
@@ -67,6 +68,55 @@ export default function EbookDisplay() {
     generateEbookContent();
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleDownloadPDF = () => {
+    // Handle the download PDF action here
+    // You can send the email and trigger the PDF download
+    closeModal(); // Close the modal after download
+  };
+
+  const formatEbookContent = () => {
+    if (ebookContent === "not-found") {
+      return <p>Ebook content not found.</p>;
+    }
+
+    const sections = ebookContent.split('\n');
+    let formattedContent = [];
+    let isContentsPage = true;
+
+    for (const section of sections) {
+      if (isContentsPage) {
+        formattedContent.push(
+          <div key={section} style={{ textAlign: 'center', fontWeight: 'bold' }}>
+            {section}
+          </div>
+        );
+        isContentsPage = false;
+      } else {
+        formattedContent.push(
+          <div key={section} style={{ marginBottom: '20px' }}>
+            <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
+              {section}
+            </div>
+          </div>
+        );
+      }
+    }
+
+    return formattedContent;
+  };
+
   if (isLoading) {
     return (
       <div className='card-side2'>
@@ -75,17 +125,10 @@ export default function EbookDisplay() {
     );
   }
 
-  if (ebookContent === "not-found") {
-    return (
-      <div className='card-side2'>
-        <p>Ebook content not found.</p>
-      </div>
-    );
-  }
   return (
     <div className='card-side2'>
       <div className="ebook-content" style={{ maxHeight: '550px', overflow: 'auto' }}>
-        <p>{ebookContent}</p>
+        {formatEbookContent()}
       </div>
 
       <div className='regen-ebook'>
@@ -93,13 +136,55 @@ export default function EbookDisplay() {
         <button id='regen-button' className="btn btn-light mx-1" onClick={regenerateEbookContent} disabled={isLoading}>
           {isLoading ? "Regenerating..." : <><img src="redoblack.svg" width="15" alt='' /> Regenerate</>}
         </button>
-        <button id='download-button' className='btn btn-light mx-1'>
+
+        <button id='download-button' className='btn btn-light mx-1' onClick={openModal}>
           <img src="./download.svg" alt="" /> Download PDF
         </button>
+
         <button id='publish-button' className='btn btn-light mx-1'>
           <img src="./star.svg" alt="" /> Publish ebook
         </button>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Download ebook"
+        style={{
+          content: {
+            width: '500px',
+            height: '256px',
+            margin: 'auto',
+            background: 'white',
+            borderRadius: '24px',
+            border: '1px solid rgba(233,233,242,1)',
+          },
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          },
+        }}
+      >
+        <button className="close-button" onClick={closeModal}>
+          <img src="./cross.svg" alt="" />
+        </button>
+
+        <h2 className='modalTitle'>Download ebook</h2>
+        <form className='modalForm'>
+          <div className="form-group">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Enter your email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </div>
+          <button id='modalDownload' className="btn btn-primary" onClick={handleDownloadPDF}>
+            <img src="downloadwhite.svg" alt="" className="modal-button-icon" />
+            Download PDF
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 }
