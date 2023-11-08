@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
+import ReactMarkdown from 'react-markdown';
+import firebase from 'firebase/compat/app'; 
+import 'firebase/compat/database';
+import 'react-toastify/dist/ReactToastify.css';
+import OpenAI from 'openai';
 
 export default function EbookDisplay() {
   const location = useLocation();
@@ -8,51 +13,57 @@ export default function EbookDisplay() {
   const [ebookContent, setEbookContent] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  const { selectedAudience, selectedPages, subject, keyTopics } = location.state;
+  const openai = new OpenAI({ apiKey: process.env.REACT_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
+  const { selectedAudience, selectedPages, keyTopics } = location.state;
 
   useEffect(() => {
-    if (!ebookContent) {
-      generateEbookContent();
+    const firebaseConfig = {
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+      projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
+
+    const database = firebase.database();
+    const ebooksRef = database.ref('ebooks');
+
+    ebooksRef.limitToLast(1).once('value', (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        const subject = data.subject;
+
+        if (ebookContent === '') {
+          generateEbookContent(subject);
+        }
+      });
+    });
+
     // eslint-disable-next-line
   }, []);
 
-  const generateEbookContent = async () => {
+  const generateEbookContent = async (subject) => {
     try {
       setIsLoading(true);
 
-      const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          prompt: `Generate a ${selectedPages}-page eBook with the title "Introduction to ${subject}" covering key topics: ${keyTopics} for 
-                    a ${selectedAudience}. The eBook should provide detailed and comprehensive information about the following key 
-                    topics: ${keyTopics}. Each page in the eBook should contain a minimum of 1000 words to ensure thorough coverage of the 
-                    subject matter. Please ensure that the eBook is well-structured and organized. Create a proper table of contents with 
-                    the names of each chapter and their respective page numbers. Additionally, use bold headings to clearly delineate different 
-                    sections within the eBook. Feel free to incorporate relevant tables, data, research references, and visual elements to 
-                    enhance the content. The content should be written in a professional and informative style, as it will be used directly in 
-                    the eBook. Make sure to maintain the quality and consistency of the content throughout the eBook, ensuring that it provides 
-                    valuable insights and knowledge to the selected audience. Your eBook should be an informative and engaging resource for 
-                    readers, offering them a comprehensive understanding of the subject and key topics, while also meeting the requirement of a 
-                    minimum of 1000 words per page.`,
-          max_tokens: 3000, // Adjust as needed
-        }),
+      const messages = [
+        { role: 'system', content: `You are a professional e-book content generator.`},
+        { role: 'user', content: `Generate a table of contents for ${selectedPages}-page e-book on the subject: ${subject} covering key topics: ${keyTopics} for a selected audience: ${selectedAudience}. Return the result in markdown.`},
+        { role: 'user', content: 'Write the content for every topic in a detailed manner, explain the topic professionally, give sub-headings for every topic and write a paragraph of content for that sub-heading, and make the paragraphs as long as possible. Every topic should have atleast two paragraphs.'},
+        { role: 'user', content: 'Write a conclusion which summarizes the whole e-book.'}
+      ];
+
+      // Send the user's message to GPT-3.5 Turbo
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: messages,
+        // max_tokens:3000,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const newEbookContent = data.choices[0].text;
-
-        if (!newEbookContent) {
-          setEbookContent("not-found");
-        } else {
-          setEbookContent(newEbookContent);
-        }
+      if (response.choices && response.choices.length > 0) {
+        const assistantReply = response.choices[0].message.content;
+        setEbookContent(assistantReply);
       } else {
         throw new Error('Failed to generate ebook content');
       }
@@ -65,9 +76,29 @@ export default function EbookDisplay() {
   };
 
   const regenerateEbookContent = () => {
-    generateEbookContent();
+    setEbookContent(''); // Set ebookContent to an empty string to trigger regeneration
+  
+    const firebaseConfig = {
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+      projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    };
+  
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+  
+    const database = firebase.database();
+    const ebooksRef = database.ref('ebooks');
+  
+    ebooksRef.limitToLast(1).once('value', (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        const subject = data.subject;
+  
+        generateEbookContent(subject); // Call generateEbookContent with the retrieved subject
+      });
+    });
   };
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -86,37 +117,6 @@ export default function EbookDisplay() {
     closeModal(); // Close the modal after download
   };
 
-  const formatEbookContent = () => {
-    if (ebookContent === "not-found") {
-      return <p>Ebook content not found.</p>;
-    }
-
-    const sections = ebookContent.split('\n');
-    let formattedContent = [];
-    let isContentsPage = true;
-
-    for (const section of sections) {
-      if (isContentsPage) {
-        formattedContent.push(
-          <div key={section} style={{ textAlign: 'center', fontWeight: 'bold' }}>
-            {section}
-          </div>
-        );
-        isContentsPage = false;
-      } else {
-        formattedContent.push(
-          <div key={section} style={{ marginBottom: '20px' }}>
-            <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
-              {section}
-            </div>
-          </div>
-        );
-      }
-    }
-
-    return formattedContent;
-  };
-
   if (isLoading) {
     return (
       <div className='card-side2'>
@@ -128,7 +128,11 @@ export default function EbookDisplay() {
   return (
     <div className='card-side2'>
       <div className="ebook-content" style={{ maxHeight: '550px', overflow: 'auto' }}>
-        {formatEbookContent()}
+        {ebookContent === "not-found" ? (
+          <p>Ebook content not found.</p>
+        ) : (
+          <ReactMarkdown children={ebookContent} />
+        )}
       </div>
 
       <div className='regen-ebook'>

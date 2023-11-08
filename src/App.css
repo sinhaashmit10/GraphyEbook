@@ -21,9 +21,17 @@
   margin-left: 10px;
 }
 
+#name{
+  border-radius: 12px;
+}
+
+#subject{
+  border-radius: 12px;
+}
+
 .ebook-form-container{
-  width: 95%; 
-  float: left; 
+  /* width: 95%;  */
+  /* float: left;  */
   font-family: 'Instrument Sans';
   margin: 20px; 
   font-weight: 500;
@@ -52,10 +60,10 @@
   width: 24%;
   margin-bottom: 10px;
   height: 6.875rem;
-  border-radius: 10px;
+  border-radius: 12px;
   background: linear-gradient(45deg, #E5E5E5 0%, #E5E5E5 50%, transparent 50%, transparent 100%),
               linear-gradient(232.41deg, #E3EEFE 1.43%, #E3E7FE 11.74%, #FFFFFF 34.45%);
-  background-size: 100% 2px, 100% 100%; /* Adjust the gradient size as needed */
+  background-size: 100% 0px, 100% 100%; /* Adjust the gradient size as needed */
   background-repeat: no-repeat;
 }
 
@@ -367,18 +375,20 @@ h2{
 @media screen and (max-width: 500px) {
   .bytext{
     font-size: 0.75rem;
+    margin-right: 10%;
   }
   #graphyLogoSideView{
     height: 2.5rem;
     width: 2.5rem;
   }
   .enterTitle{
+    margin-top: 25%;
     font-size: 2.5rem;
   }
   .sideViewBottom{
     display: flex;
     flex-direction: row;
-    margin-top: 45%;
+    margin-top: 20%;
     margin-left: 25%;
   }
   .card-side{
@@ -388,6 +398,19 @@ h2{
 }
 
 @media screen and (max-width: 545px) {
+  .card-side{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sideViewBottom{
+    margin-left: 50px;
+  }
+
+  #graphyLogoSideView{
+    margin-left: 100%;
+  }
+
   .btn-group{
     margin-bottom: 0;
   }
@@ -397,6 +420,9 @@ h2{
 }
 
 @media screen and (max-width: 1120px){
+  .card-side{
+    display: flex;
+  }
   .card{
     display: flex;
     flex-direction: row;
