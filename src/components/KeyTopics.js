@@ -4,7 +4,7 @@ import firebase from 'firebase/compat/app'; // Import the "compat" version of Fi
 import 'firebase/compat/database'; // Import Firebase Realtime Database module;
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Navbar from './Navbar';
 export default function KeyTopics() {
   const navigate = useNavigate();
   const [selectedAudience, setSelectedAudience] = useState('');
@@ -49,6 +49,8 @@ export default function KeyTopics() {
   };
 
   return (
+    <>
+    <Navbar/>
     <div id='keyTopicsForm' className='ebook-form-container'>
       <h2>Generate ebook with AI</h2>
       <div className="form-group">
@@ -112,5 +114,6 @@ export default function KeyTopics() {
       </button>
       <ToastContainer />
     </div>
+    </>
   );
 }

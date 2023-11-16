@@ -50,7 +50,7 @@ export default function EbookDisplay() {
       const messages = [
         { role: 'system', content: `You are a professional e-book content generator.`},
         { role: 'user', content: `Generate a table of contents for ${selectedPages}-page e-book on the subject: ${subject} covering key topics: ${keyTopics} for a selected audience: ${selectedAudience}. Return the result in markdown.`},
-        { role: 'user', content: 'Write the content for every topic in a detailed manner, explain the topic professionally, give sub-headings for every topic and write a paragraph of content for that sub-heading, and make the paragraphs as long as possible. Every topic should have atleast two paragraphs.'},
+        { role: 'user', content: 'Write the content for every topic. Make the content professional so that I can use it directly in my ebook, give sub-headings for every topic and write a paragraph of content for that sub-heading, and make the paragraphs as long as possible. Every topic should have 3 paragraphs.'},
         { role: 'user', content: 'Write a conclusion which summarizes the whole e-book.'}
       ];
 
@@ -119,14 +119,14 @@ export default function EbookDisplay() {
 
   if (isLoading) {
     return (
-      <div className='card-side2'>
+      <div className='card-side2' style={{marginTop: '2.5rem'}}>
         <div className='loadingSpinner'></div>
       </div>
     );
   }
 
   return (
-    <div className='card-side2'>
+    <div className='card-side2' style={{marginTop: '2.5rem'}}>
       <div className="ebook-content" style={{ maxHeight: '550px', overflow: 'auto' }}>
         {ebookContent === "not-found" ? (
           <p>Ebook content not found.</p>

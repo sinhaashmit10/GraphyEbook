@@ -87,12 +87,9 @@
   width: 143.95px;
   height: 32px;
   border-radius: 8px;
-  align-self: flex-end;
-  margin-left: 600px;
   font-size: 12px;
   background-color: #6059FF;
   border: none;
-  padding: 12px,16px,12px,12px;
 }
 
 .btn-primary img{
@@ -131,8 +128,6 @@
   width: 143.95px;
   height: 32px;
   border-radius: 8px;
-  padding: 12px,16px,12px,12px;
-  gap: 8px;
   background-color: #6059FF;
   border: none;
   margin-left: 80%;
@@ -140,6 +135,10 @@
 
 .btn-group {
   margin-bottom: 24.85%;
+}
+
+#keytopics{
+  border-radius: 12px;
 }
 
 #keyTopicsForm{
@@ -313,7 +312,8 @@ h2{
 
 .card-side2{
   width: 90%;
-  height: 650px;
+  height: 655px;
+  margin-top: 2.5rem;
   margin-bottom: 25px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -322,7 +322,8 @@ h2{
   margin-left: 40px;
   margin-right: 50px;
   margin-top: 0.5rem;
-  overflow: auto;
+  overflow: hidden;
+  overflow-x: auto;
 }
 
 .ebookdisplay-header{

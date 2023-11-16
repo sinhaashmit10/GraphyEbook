@@ -5,6 +5,7 @@ import firebase from 'firebase/compat/app'; // Import the "compat" version of Fi
 import 'firebase/compat/database'; // Import Firebase Realtime Database module
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Navbar from './Navbar';
 
 function EbookForm() {
   const [text, setText] = useState('');
@@ -143,6 +144,7 @@ function EbookForm() {
 
   return (
     <>
+    <Navbar/>
       <div className="ebook-form-container">
         <h2>Generate ebook with AI</h2>
         <div className="form-group">
