@@ -254,6 +254,7 @@ input::placeholder{
 }
 
 .bytext{
+  font-family: 'Instrument Sans';
   margin-top: 23%;
   margin-left: 5%;
   font-weight: 600;
@@ -274,6 +275,19 @@ h5{
   flex-direction: row;
   width: 44vw;
   max-width: 44vw;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.sideViewBottom2{
+  margin-bottom: 1.5rem;
+  display: flex;
+  max-height: 15rem;
+  flex-direction: row;
+  width: 35vw;
+  max-width: 35vw;
 }
 
 
@@ -299,6 +313,14 @@ h2{
   border-top-right-radius: 9px;
 }
 
+#coverImage2{
+  object-fit: cover;
+  width: 100%;
+  max-height: 300px;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+}
+
 .contentLabel{
   margin-left: 25px;
   color: rgba(135, 140, 144, 1);
@@ -306,11 +328,11 @@ h2{
 }
 
 .logo-display{
-  margin-left: 1%;
+  margin-left: 20%;
   margin-right: 25%;
 }
 
-.card-side2{
+/* .card-side2{
   width: 90%;
   height: 655px;
   margin-top: 2.5rem;
@@ -324,6 +346,20 @@ h2{
   margin-top: 0.5rem;
   overflow: hidden;
   overflow-x: auto;
+} */
+.card-side2{
+  width: 600px;
+  height: 600px;
+  margin-top: 2.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 29%;
+  margin-right: 25%;
+  overflow: hidden;
+  overflow-y: auto;
+  font-family: 'Instrument Sans';
 }
 
 .ebookdisplay-header{
@@ -342,9 +378,9 @@ h2{
 }
 
 .regen-ebook{
-  max-width: 55rem;
-  width: 41rem;
-  margin-top: 6%;
+  /* max-width: 55rem; */
+  width: 100%;
+  margin-top: 2.5%;
   display: flex;
   flex-direction: row;
 }
@@ -383,6 +419,7 @@ h2{
     width: 2.5rem;
   }
   .enterTitle{
+    font-family: 'Instrument Sans';
     margin-top: 25%;
     font-size: 2.5rem;
   }
@@ -451,9 +488,11 @@ h2{
   }
   .regen-ebook{
     width: 55rem;
+    margin-left: 6%;
+    margin-right: 15%;
   }
   .logo-display{
-    margin-right: 40%;
+    margin-right: 20%;
   }
 }
 

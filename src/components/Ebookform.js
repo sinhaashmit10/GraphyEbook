@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import firebase from 'firebase/compat/app'; // Import the "compat" version of Firebase
-import 'firebase/compat/database'; // Import Firebase Realtime Database module
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Navbar from './Navbar';
 
 function EbookForm() {
   const [text, setText] = useState('');
@@ -26,7 +25,6 @@ function EbookForm() {
   ]);
   const [showGenerateButton, setShowGenerateButton] = useState(true);
 
-  // Initialize Firebase with your Firebase configuration
   const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
@@ -66,21 +64,21 @@ function EbookForm() {
         const coverImage = document.getElementById('coverImage');
         coverImage.src = response.data.urls.regular;
 
-        // Set the title and author after fetching image
-        document.querySelector('.enterTitle').textContent = subject; // Set the title to the subject
-        document.querySelector('.bytext').textContent = `By: ${text}`; // Set the author to the name
+        document.querySelector('.enterTitle').textContent = subject;
+        document.querySelector('.bytext').textContent = `By: ${text}`;
 
-        // Update suggestion contents
         setSuggestionContents((prevContents) => [
-          subject, // Display the subject in the first suggestion
-          ...prevContents.slice(0, -1), // Remove the last suggestion
+          subject,
+          ...prevContents.slice(0, -1),
         ]);
 
-        // Hide the "Generate Cover" button and show "Regenerate" and "Next" buttons
         setShowGenerateButton(false);
 
-        // After fetching the image, save the name and subject to Firebase
-        saveDataToFirebase({ name: text, subject });
+        saveDataToFirebase({
+          name: text,
+          subject,
+          imageUrl: response.data.urls.regular,
+        });
       } else {
         showImageFetchErrorToast();
       }
@@ -105,7 +103,6 @@ function EbookForm() {
   };
 
   const saveDataToFirebase = (data) => {
-    // Push the data to Firebase's "ebooks" node
     const ebooksRef = database.ref('ebooks');
     ebooksRef.push(data, (error) => {
       if (error) {
@@ -138,13 +135,11 @@ function EbookForm() {
   };
 
   const handleNextClick = () => {
-    // Navigate to KeyTopics.js when the "Next" button is clicked and pass subject as a prop
     navigate('/KeyTopics', { state: { subject } });
   };
 
   return (
     <>
-    <Navbar/>
       <div className="ebook-form-container">
         <h2>Generate ebook with AI</h2>
         <div className="form-group">
