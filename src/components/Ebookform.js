@@ -10,18 +10,18 @@ function EbookForm() {
   const [text, setText] = useState('');
   const [subject, setSubject] = useState('');
   const [suggestionContents, setSuggestionContents] = useState([
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
-    'Suggestion content',
+    'Health & Wellness',
+    'Financial Freedom',
+    'Technology & Innovation',
+    'Eco-Friendly Living',
+    'Parenting & Family',
+    'Education & Learning',
+    'Science of Happiness',
+    'Innovative Leadership',
+    'Epicurean Adventures',
+    'Mind-Body Connection',
+    'The Mindful Entrepreneur',
+    'The Blueprint of Joy',
   ]);
   const [showGenerateButton, setShowGenerateButton] = useState(true);
 
@@ -142,7 +142,7 @@ function EbookForm() {
     <>
       <div className="ebook-form-container">
         <h2>Generate ebook with AI</h2>
-        <div className="form-group">
+        <div id='ebookForm' className="form-group">
           <label className="form-header" htmlFor="name">
             Name:
           </label>

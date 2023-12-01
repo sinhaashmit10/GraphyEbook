@@ -6,6 +6,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/database';
 import 'react-toastify/dist/ReactToastify.css';
 import OpenAI from 'openai';
+import html2pdf from 'html2pdf.js';
 
 export default function EbookDisplay() {
   const location = useLocation();
@@ -52,22 +53,44 @@ export default function EbookDisplay() {
     try {
       const messages = [
         { role: 'system', content: `You are a professional e-book content generator.` },
-        { role: 'user', content: `Generate a table of contents for ${selectedPages}-page e-book on the subject: ${subject} covering key topics: ${keyTopics} for a selected audience: ${selectedAudience}. Return the result in markdown.` },
-        { role: 'user', content: 'Write the content for every topic. Make the content professional so that I can use it directly in my ebook, give sub-headings with for every topic and write a paragraph of content for that sub-heading, and make the paragraphs as long as possible. Every topic should have 3 paragraphs.' },
-        { role: 'user', content: 'Write a conclusion which summarizes the whole e-book.' }
+        { role: 'user', content: `Write the ${keyTopics} on ${subject} in the table of contents. No explanations. Return the result in markdown.` },
+        // { role: 'assistant', content: `Here is the table of contents:` }, // Assistant provides the context
       ];
-
-      const response = await openai.chat.completions.create({
+  
+      const response1 = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: messages,
       });
+      const unsplashApiUrl = `https://api.unsplash.com/photos/random?query=${subject}&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}`;
+      const unsplashResponse = await fetch(unsplashApiUrl);
 
-      if (response.choices && response.choices.length > 0) {
-        const assistantReply = response.choices[0].message.content;
-        setEbookContent(assistantReply);
-      } else {
-        throw new Error('Failed to generate ebook content');
+      if (!unsplashResponse.ok) {
+        throw new Error(`Failed to fetch Unsplash image. Status: ${unsplashResponse.status}`);
       }
+
+      const unsplashData = await unsplashResponse.json();
+      const unsplashImageUrl = unsplashData.urls.regular;
+
+      console.log('Unsplash Image URL:', unsplashImageUrl);
+
+      const userPrompt2 = `Now, write detailed content of about ${selectedPages} pages for each ${keyTopics} of the subject ${subject}. Content should be targeted ${selectedAudience} Write the heading of the topic in h2. Ensure the content is professional and suitable for direct use in the e-book. Include sub-headings in h3 for each topic and write three paragraphs of informative content for each sub-heading. Also, use Unsplash for relevant images: ![Unsplash Image](${unsplashImageUrl}) Return the result in markdown.`;
+  
+      const response2 = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: 'user', content: userPrompt2 }],
+      });
+  
+      const userPrompt3 = `Finally, write a conclusion that summarizes the entire e-book on the subject ${subject}. Return the result in markdown.`;
+  
+      const response3 = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: 'user', content: userPrompt3 }],
+      });
+  
+      // Combine the responses if needed
+      const assistantReply = response1.choices[0].message.content + '\n\n' + response2.choices[0].message.content + '\n\n' + response3.choices[0].message.content;
+  
+      setEbookContent(assistantReply);
     } catch (error) {
       console.error('Error generating ebook content:', error);
       alert('Failed to generate the ebook content. Please try again later.');
@@ -115,13 +138,18 @@ export default function EbookDisplay() {
 
   const handleDownloadPDF = () => {
     closeModal();
-    // Handle the download PDF action here
-    // You can send the email and trigger the PDF download
+    var element = document.getElementById('gen-content');
+    var opt = {
+      margin: 20,
+      filename: 'ebook.pdf',
+      image: {type: 'jpeg', quality: 0.98},
+    };
+    html2pdf().from(element).set(opt).save();
   };
 
   if (isLoading) {
     return (
-      <div className='card-side2' style={{ marginTop: '2.5rem' }}>
+      <div id='card-side2' className='card-side2' style={{ marginTop: '2.5rem' }}>
         <div className='loadingSpinner'></div>
       </div>
     );
@@ -129,14 +157,16 @@ export default function EbookDisplay() {
 
   return (
     <>
-      <div className='card-side2' style={{ marginTop: '2.5rem' }}>
+      <div id='card-side2' className='card-side2' style={{ marginTop: '2.5rem' }}>
+        <div id='gen-content' className="gen-content">
         <div className="book-details">
           <img id="coverImage2" src={bookDetails.imageUrl} alt={bookDetails.name} />
           <h1 className="enterTitle">{bookDetails.subject}</h1>
           <div className="sideViewBottom2">
             <p className="bytext">by: {bookDetails.name}</p>
-            <img src="graphylogo2.svg" alt="" id='graphyLogoSideView'/>
+            <img src="graphylogo2.svg" alt="" id='graphyLogoSideView2'/>
           </div>
+          <div class="html2pdf__page-break"></div>
         </div>
         <div className="ebook-content" style={{ maxHeight: '550px', overflow: 'auto' }}>
           {ebookContent === "not-found" ? (
@@ -153,18 +183,20 @@ export default function EbookDisplay() {
               h2: ({ node, ...props }) => <h2 style={{ fontSize: '24px', marginTop:'10px', fontWeight:'700' }} {...props} />,
               // eslint-disable-next-line
               h3: ({ node, ...props }) => <h3 style={{ fontSize: '16px', fontWeight:'700', marginTop:'5px' }} {...props} />,
+              img: ({ node, ...props }) => <img style={{width: '100%', height: '200px', objectFit: 'cover'}}alt="" {...props} />,
             }}/>
           )}
+        </div>
         </div>
       </div>
       <div className='regen-ebook'>
         <img src="graphylogo2.svg" alt="" className="logo-display" />
         <button id='regen-button' className="btn btn-light mx-1" onClick={regenerateEbookContent} disabled={isLoading}>
-          {isLoading ? "Regenerating..." : <><img src="redoblack.svg" width="15" alt='' /> Regenerate</>}
+          {isLoading ? "Regenerating..." : <><img className='regenImage' src="redoblack.svg" width="15" alt='' /> <span className="regenText">Regenerate</span></>}
         </button>
 
         <button id='download-button' className='btn btn-light mx-1' onClick={openModal}>
-          <img src="./download.svg" alt="" /> Download PDF
+          <img className='downloadImage' src="./download.svg" alt="" /> <span className="downloadText"> Download PDF </span>
         </button>
 
         <button id='publish-button' className='btn btn-light mx-1'>

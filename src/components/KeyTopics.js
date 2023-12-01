@@ -4,13 +4,12 @@ import firebase from 'firebase/compat/app'; // Import the "compat" version of Fi
 import 'firebase/compat/database'; // Import Firebase Realtime Database module;
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 export default function KeyTopics() {
   const navigate = useNavigate();
   const [selectedAudience, setSelectedAudience] = useState('');
   const [keyTopics, setKeyTopics] = useState('');
-  const [selectedPages, setSelectedPages] = useState(1);
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
+  const [selectedPages, setSelectedPages] = useState('');
   const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
@@ -43,75 +42,84 @@ export default function KeyTopics() {
     setKeyTopics(e.target.value);
   };
 
-  const handlePagesChange = (pages) => {
-    setSelectedPages(pages);
-  };
+  const handleInputChange = (e) => {
+    const inputPages = e.target.value;
+    if (inputPages === '' || (Number.isInteger(Number(inputPages)) && Number(inputPages) >= 0)) {
+      setSelectedPages(inputPages);
+    }
+  };  
 
   return (
     <>
-    <div id='keyTopicsForm' className='ebook-form-container'>
-      <h2>Generate ebook with AI</h2>
-      <div className="form-group">
-        <label className="form-header" htmlFor="topics">
-          Key Topics
-        </label>
-        <input
-          type='text'
-          className="form-control"
-          id="keytopics"
-          placeholder="Enter topics separated by commas"
-          value={keyTopics}
-          onChange={handleTopicsChange}
-        />
-      </div>
+      <div id='keyTopicsForm' className='ebook-form-container'>
+        <h2>Generate ebook with AI</h2>
+        <div className="form-group">
+          <label className="form-header" htmlFor="topics">
+            Key Topics
+          </label>
+          <input
+            type='text'
+            className="form-control"
+            id="keytopics"
+            placeholder="Enter topics separated by commas"
+            value={keyTopics}
+            onChange={handleTopicsChange}
+          />
+        </div>
 
-      <div className="form-group2">
-        <label className="form-header">Target Audience</label>
-        <div className="row">
-          {['Kids', 'Student', 'Apprentice', 'Scholar', 'Expert', 'Thought Leader'].map((audience) => (
-            <div className="col" key={audience}>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id={`flexRadioDefault${audience}`}
-                  value={audience}
-                  checked={selectedAudience === audience}
-                  onChange={handleRadioChange}
-                />
-                <label className="form-check-label" htmlFor={`flexRadioDefault${audience}`}>
-                  {audience}
-                  <img src={`${audience.toLowerCase()}.svg`} alt="" />
-                </label>
+        <div className="form-group2">
+          <label id='targetAudience' className="form-header">Target Audience</label>
+          <div className="row">
+            {['Kids', 'Student', 'Apprentice', 'Scholar', 'Expert', 'Thought Leader'].map((audience) => (
+              <div className="col" key={audience}>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id={`flexRadioDefault${audience}`}
+                    value={audience}
+                    checked={selectedAudience === audience}
+                    onChange={handleRadioChange}
+                  />
+                  <label className="form-check-label" htmlFor={`flexRadioDefault${audience}`}>
+                    {audience}
+                    <img src={`${audience.toLowerCase()}.svg`} alt="" />
+                  </label>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="btn-group dropend">
-          <button id='pageCounter' className="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            No. of pages: {selectedPages}
-          </button>
-          <ul className="dropdown-menu">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((pages) => (
-              <li key={pages}>
-                <button
-                  className="dropdown-item"
-                  onClick={() => handlePagesChange(pages)}
-                >
-                  {pages}
-                </button>
-              </li>
             ))}
-          </ul>
+          </div>
+          <div className="audienceCounter">
+            <label id='audienceHeader' className="form-header">No. of content pages</label>
+            <div className="input-group">
+              <button id='minusBtn' type="button" onClick={() => setSelectedPages((prevPages) => Math.max(Number(prevPages) - 1, 1))}>
+                -
+              </button>
+              <input
+                type="number"
+                id='pageNum'
+                className="form-control"
+                value={selectedPages}
+                onChange={handleInputChange}
+              />
+              <button id='plusBtn' type="button" onClick={() => setSelectedPages((prevPages) => Math.max(Number(prevPages) + 1, 1))}>
+                +
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <button id='generateEbookBtn' className="btn btn-success mt-3" onClick={handleGenerateClick}>
-        {loading ? <div className="spinner-border text-light" role="status"><span className="visually-hidden">Loading...</span></div> : <><img src="star.svg" width="15" alt=''/>Generate ebook</>}
-      </button>
-      <ToastContainer />
-    </div>
+        <button id='generateEbookBtn' className="btn btn-success mt-3" onClick={handleGenerateClick}>
+        
+            <>
+              <img src="star.svg" width="15" alt=''/>
+              Generate ebook
+            </>
+          
+        </button>
+        <ToastContainer />
+      </div>
     </>
   );
 }
